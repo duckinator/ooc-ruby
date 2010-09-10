@@ -19,7 +19,10 @@ RubyValue: cover from VALUE {
 	this toString() println()
     }
 
-    inspect: func {
+    inspect: extern(rb_inspect) func -> RubyValue
+
+    p: func {
+	this inspect() println()
     }
 }
 
@@ -53,6 +56,7 @@ Ruby init()
 test := Ruby load("test.rb")
 Ruby eval("puts 'hi'")
 Ruby eval("5") println()
+Ruby eval("[1,2,3]") p()
 Ruby eval("def greet(name); \"Hello, #{name}!\"; end; greet('duck')") println()
 Ruby safe() toString() println()
 Ruby safe(3) toString() println()

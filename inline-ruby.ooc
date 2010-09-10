@@ -1,7 +1,12 @@
 include ruby
 
 RubyValue: cover from VALUE {
-    toCString: extern(RSTRING_PTR) func -> CString
+    toRString: extern(rb_obj_as_string) func -> RubyValue
+    rvalToCString: extern(RSTRING_PTR) func -> CString
+    toCString: func -> CString {
+	this toRString() rvalToCString()
+    }
+
     toString: func -> String {
 	this toCString() toString()
     }
@@ -47,7 +52,7 @@ Ruby: class {
 Ruby init()
 test := Ruby load("test.rb")
 Ruby eval("puts 'hi'")
-Ruby eval("'5'") println()
+Ruby eval("5") println()
 Ruby eval("def greet(name); \"Hello, #{name}!\"; end; greet('duck')") println()
 Ruby safe() toString() println()
 Ruby safe(3) toString() println()

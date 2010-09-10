@@ -31,10 +31,16 @@ RubyNode: cover from Pointer {
 }
 
 Ruby: class {
-    init: extern(ruby_init) static func
+    rubyInit: extern(ruby_init) static func
+    initLoadpath: extern(ruby_init_loadpath) static func
+    init: static func {
+	rubyInit()
+	initLoadpath()
+    }
     finalize: extern(ruby_finalize) static func
     script: extern(ruby_script) static func(CString)
     eval: extern(rb_eval_string) static func (CString) -> RubyValue
+
     load: extern(rb_load_file) static func (CString) -> RubyNode
 
     /// equivalent to $SAFE=x in ruby

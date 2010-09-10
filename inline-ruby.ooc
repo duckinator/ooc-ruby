@@ -28,6 +28,20 @@ Ruby: class {
     script: extern(ruby_script) static func(CString)
     eval: extern(rb_eval_string) static func (CString) -> RubyValue
     load: extern(rb_load_file) static func (CString) -> RubyNode
+
+    /// equivalent to $SAFE=x in ruby
+    setSafe: extern(rb_set_safe_level) static func (Int) -> Int
+
+    /// returns ruby's $SAFE level
+    safe: extern(rb_safe_level) static func -> Int
+
+    /** sets ruby's $SAFE to level then returns the current safe level
+	returns true if $SAFE == level, false otherwise
+    */
+    safe: static func ~set (level: Int) -> Bool {
+	setSafe(level)
+	(safe() == level)
+    }
 }
 
 Ruby init()
@@ -35,4 +49,7 @@ test := Ruby load("test.rb")
 Ruby eval("puts 'hi'")
 Ruby eval("'5'") println()
 Ruby eval("def greet(name); \"Hello, #{name}!\"; end; greet('duck')") println()
+Ruby safe() toString() println()
+Ruby safe(3) toString() println()
+Ruby safe(1) toString() println()
 Ruby finalize()

@@ -256,7 +256,7 @@ Ruby safe(1) toString() println()
 Ruby def("test", |self, str| str println())
 Ruby eval("test 'hai'")
 
-Ruby eval("Fixnum") def("meep", |self| "ohai from Fixnum" println())
+Ruby getConstant("Fixnum") def("meep", |self| "ohai from Fixnum" println())
 Ruby eval("1.meep")
 
 Ruby getConstant("Fixnum") inspect() println()

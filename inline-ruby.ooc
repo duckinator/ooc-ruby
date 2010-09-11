@@ -254,21 +254,13 @@ Ruby: class {
     }
 }
 
-operator implicit as (s: String) -> RubyValue {
-    s ? s toRString() : Ruby nil
-}
-
-operator implicit as (s: RubyValue) -> String {
-    s ? s toString() : null
-}
-
 Ruby init()
 test := Ruby load("test.rb")
 Ruby eval("puts 'hi'")
 Ruby eval("5") println()
 Ruby eval("[1,2,3]") inspect() println()
 
-Ruby def("greet", |self, name| "Hello, %s!" format(name) toRString())
+Ruby def("greet", |self, name| "Hello, %s!" format(name toCString()) toRString())
 Ruby eval("greet('duck')") println()
 
 Ruby safe() toString() println()

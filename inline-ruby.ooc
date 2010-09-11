@@ -46,6 +46,8 @@ RubyValue: cover from VALUE {
 	this toString() println()
     }
 
+    // VALUE rb_funcall(VALUE recv, ID mid, int argc, ...)
+
     getConstantFromId: extern(rb_const_get) func (id: RubyId) -> RubyValue
     getConstant: func (name: String) -> RubyValue {
 	getConstantFromId(Ruby intern(name))
@@ -54,6 +56,15 @@ RubyValue: cover from VALUE {
     setConstantWithId: extern(rb_const_set) func (id: RubyId, value: RubyValue)
     setConstant: func (name: String, value: RubyValue) {
 	setConstantWithId(Ruby intern(name), value)
+    }
+
+    respondsToWithId: extern(rb_respond_to) func (id: RubyId) -> Int
+    respondsTo?: func (name: String) -> RubyValue {
+	if(respondsToWithId(Ruby intern(name)) toString() != "0") { // Yes, yes, I know. So kill me.
+	    return Ruby true
+	} else {
+	    return Ruby false
+	}
     }
 
     inspect: extern(rb_inspect) func -> RubyValue
@@ -165,6 +176,7 @@ Ruby: class {
 	eval("Kernel") setConstant(name, value)
     }
 
+    // Implement def() with variable # of args
     def: extern(rb_define_global_function) static func ~withArgc (name: CString, fn: Pointer, argc: Int)
 
     def: static func ~noArgs (name: String, fn: Func (RubyValue) -> RubyValue) {
@@ -282,5 +294,8 @@ Ruby eval("1.meep")
 Ruby getConstant("Fixnum") inspect() println()
 Ruby getConstant("Fixnum") setConstant("K", Ruby getConstant("Kernel"))
 Ruby getConstant("Fixnum") getConstant("K") inspect() println()
+
+Ruby eval("1") respondsTo?("methods") println()
+Ruby eval("1") respondsTo?("not_a_method") println()
 
 Ruby finalize()

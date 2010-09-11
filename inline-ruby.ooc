@@ -1,21 +1,27 @@
 include ruby
 
 extend Int {
-    toRNumber: extern(INT2NUM) static func (Int) -> RubyValue
-    toRFixnum: extern(INT2FIX) static func (Int) -> RubyValue
+    toRNumber: extern(INT2NUM) func -> RubyValue
+    toRFixnum: extern(INT2FIX) func -> RubyValue
 }
 
 extend Long {
-    toRNumber: extern(INT2NUM) static func (Long) -> RubyValue
-    toRFixnum: extern(INT2NUM) static func (Long) -> RubyValue
+    toRNumber: extern(INT2NUM) func -> RubyValue
+    toRFixnum: extern(INT2NUM) func -> RubyValue
 }
 
 extend Char {
-    toRFixnum: extern(CHR2FIX) static func (Char) -> RubyValue
+    toRFixnum: extern(CHR2FIX) func -> RubyValue
+}
+
+extend CString {
+    toRString: extern(rb_str_new2) func -> RubyValue
 }
 
 extend String {
-    toRString: extern(rb_str_new2) static func (CString) -> RubyValue
+    toRString: func -> RubyValue {
+	this toCString() toRString()
+    }
 }
 
 RubyId: cover from ID {
@@ -132,6 +138,11 @@ RubyNode: cover from Pointer {
 }
 
 Ruby: class {
+    // Some ruby types
+    nil: extern(Qnil) static RubyValue
+    true: extern(Qtrue) static RubyValue
+    false: extern(Qfalse) static RubyValue
+
     rubyInit: extern(ruby_init) static func
     initLoadpath: extern(ruby_init_loadpath) static func
     init: static func {
@@ -248,15 +259,24 @@ test := Ruby load("test.rb")
 Ruby eval("puts 'hi'")
 Ruby eval("5") println()
 Ruby eval("[1,2,3]") inspect() println()
-Ruby eval("def greet(name); \"Hello, #{name}!\"; end; greet('duck')") println()
+
+Ruby def("greet", |self, name| "Hello, %s!" format(name toCString()) toRString())
+Ruby eval("greet('duck')") println()
+
 Ruby safe() toString() println()
 Ruby safe(3) toString() println()
 Ruby safe(1) toString() println()
 
-Ruby def("test", |self, str| str println())
+Ruby def("test", |self, str|
+    str println()
+    str
+)
 Ruby eval("test 'hai'")
 
-Ruby getConstant("Fixnum") def("meep", |self| "ohai from Fixnum" println())
+Ruby getConstant("Fixnum") def("meep", |self|
+    "ohai from Fixnum" println()
+    Ruby nil
+)
 Ruby eval("1.meep")
 
 Ruby getConstant("Fixnum") inspect() println()

@@ -18,6 +18,9 @@ extend String {
     toRString: extern(rb_str_new2) static func (CString) -> RubyValue
 }
 
+RubyId: cover from ID {
+}
+
 RubyValue: cover from VALUE {
     toRString: extern(rb_obj_as_string) func -> RubyValue
     rvalToCString: extern(RSTRING_PTR) func -> CString
@@ -37,9 +40,91 @@ RubyValue: cover from VALUE {
 	this toString() println()
     }
 
+    getConstantFromId: extern(rb_const_get) func (id: RubyId) -> RubyValue
+    getConstant: func (name: String) -> RubyValue {
+	getConstantFromId(Ruby intern(name))
+    }
+
+    setConstantWithId: extern(rb_const_set) func (id: RubyId, value: RubyValue)
+    setConstant: func (name: String, value: RubyValue) {
+	setConstantWithId(Ruby intern(name), value)
+    }
+
     inspect: extern(rb_inspect) func -> RubyValue
 
-    def: extern(rb_define_method) static func (class: RubyValue, name: CString, fn: Func (RubyValue) -> RubyValue, argc: Int)
+    def: extern(rb_define_method) func (name: CString, fn: Pointer, argc: Int)
+
+    def: func ~noArgs (name: String, fn: Func (RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 0)
+    }
+
+    def: func ~oneArg (name: String, fn: Func (RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 1)
+    }
+
+    def: func ~twoArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 2)
+    }
+
+    def: func ~threeArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 3)
+    }
+
+    def: func ~fourArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 4)
+    }
+
+    def: func ~fiveArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 5)
+    }
+
+    def: func ~sixArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 6)
+    }
+
+    def: func ~sevenArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 7)
+    }
+
+    def: func ~eightArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 8)
+    }
+
+    def: func ~nineArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 9)
+    }
+
+    def: func ~tenArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 10)
+    }
+
+    def: func ~elevenArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 11)
+    }
+
+    def: func ~twelveArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 12)
+    }
+
+    def: func ~thirteenArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 13)
+    }
+
+    def: func ~fourteenArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 14)
+    }
+
+    def: func ~fifteenArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 15)
+    }
+
+    def: func ~sixteenArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 16)
+    }
+
+    def: func ~seventeenArgs (name: String, fn: Func (RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue, RubyValue) -> RubyValue) {
+	def(name, (fn as Closure) thunk, 17)
+    }
 }
 
 RubyNode: cover from Pointer {
@@ -58,6 +143,16 @@ Ruby: class {
     eval: extern(rb_eval_string) static func (CString) -> RubyValue
 
     load: extern(rb_load_file) static func (CString) -> RubyNode
+
+    intern: extern(rb_intern) static func (CString) -> RubyId
+
+    getConstant: static func (name: String) -> RubyValue {
+	eval("Kernel") getConstant(name)
+    }
+
+    setConstant: static func (name: String, value: RubyValue) {
+	eval("Kernel") setConstant(name, value)
+    }
 
     def: extern(rb_define_global_function) static func ~withArgc (name: CString, fn: Pointer, argc: Int)
 
@@ -160,5 +255,12 @@ Ruby safe(1) toString() println()
 
 Ruby def("test", |self, str| str println())
 Ruby eval("test 'hai'")
+
+Ruby eval("Fixnum") def("meep", |self| "ohai from Fixnum" println())
+Ruby eval("1.meep")
+
+Ruby getConstant("Fixnum") inspect() println()
+Ruby getConstant("Fixnum") setConstant("K", Ruby getConstant("Kernel"))
+Ruby getConstant("Fixnum") getConstant("K") inspect() println()
 
 Ruby finalize()

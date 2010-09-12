@@ -44,6 +44,10 @@ RubyValue: cover from VALUE {
 	this toCString() toString()
     }
 
+    toBool: func -> Bool {
+	(this != Ruby false && this != Ruby nil)
+    }
+
     print: func {
 	this toString() print()
     }
@@ -295,6 +299,124 @@ Ruby: class {
     }
 }
 
+/* Comparisons */
+
+operator == (one, two: RubyValue) -> Bool {
+    one send("==", two) toBool()
+}
+
+operator != (one, two: RubyValue) -> Bool {
+    one send("!=", two) toBool()
+}
+
+/* Access and modification */
+
+operator [] (item, index: RubyValue) -> RubyValue {
+    item send("[]", index)
+}
+
+operator [] (item: RubyValue, index: SSizeT) -> RubyValue {
+    item send("[]", index toRNumber())
+}
+
+/*operator [] (item: RubyValue, range: Range) -> RubyValue {
+    item send("[]", range toRRange())
+}*/
+
+operator []= (item, index, value: RubyValue) -> RubyValue {
+    item send("[]=", index, value)
+}
+
+operator []= (item, index: RubyValue, value: SSizeT) -> RubyValue {
+    item send("[]=", index, value toRNumber())
+}
+
+operator []= (item, index: RubyValue, value: String) -> RubyValue {
+    item send("[]=", index, value toRString())
+}
+
+operator []= (item, index: RubyValue, value: CString) -> RubyValue {
+    item send("[]=", index, value toRString())
+}
+
+operator []= (item: RubyValue, index: SSizeT, value: RubyValue) -> RubyValue {
+    item send("[]=", index toRNumber(), value)
+}
+
+operator []= (item: RubyValue, index: SSizeT, value: SSizeT) -> RubyValue {
+    item send("[]=", index toRNumber(), value toRNumber())
+}
+
+operator []= (item: RubyValue, index: SSizeT, value: String) -> RubyValue {
+    item send("[]=", index toRNumber(), value toRString())
+}
+
+operator []= (item: RubyValue, index: SSizeT, value: CString) -> RubyValue {
+    item send("[]=", index toRNumber(), value toRString())
+}
+
+operator []= (item: RubyValue, index: String, value: RubyValue) -> RubyValue {
+    item send("[]=", index toRString(), value)
+}
+
+operator []= (item: RubyValue, index: String, value: SSizeT) -> RubyValue {
+    item send("[]=", index toRString(), value toRNumber())
+}
+
+operator []= (item: RubyValue, index: String, value: String) -> RubyValue {
+    item send("[]=", index toRString(), value toRString())
+}
+
+operator []= (item: RubyValue, index: String, value: CString) -> RubyValue {
+    item send("[]=", index toRString(), value toRString())
+}
+
+operator []= (item: RubyValue, index: CString, value: RubyValue) -> RubyValue {
+    item send("[]=", index toRString(), value)
+}
+
+operator []= (item: RubyValue, index: CString, value: SSizeT) -> RubyValue {
+    item send("[]=", index toRString(), value toRNumber())
+}
+
+operator []= (item: RubyValue, index: CString, value: String) -> RubyValue {
+    item send("[]=", index toRString(), value toRString())
+}
+
+operator []= (item: RubyValue, index: CString, value: CString) -> RubyValue {
+    item send("[]=", index toRString(), value toRString())
+}
+
+/* Concatenation, math, etc */
+
+operator * (left, right: RubyValue) -> RubyValue {
+    left send("*", right)
+}
+
+operator * (left: RubyValue, right: SSizeT) -> Bool {
+    left send("*", right toRNumber()) toBool()
+}
+
+operator + (left, right: RubyValue) -> RubyValue {
+    left send("+", right)
+}
+
+operator + (left: RubyValue, right: SSizeT) -> RubyValue {
+    left send("+", right toRNumber())
+}
+
+operator + (left: RubyValue, right: String) -> RubyValue {
+    left send("+", right toRString())
+}
+
+operator + (left: RubyValue, right: CString) -> RubyValue {
+    left send("+", right toRString())
+}
+
+operator + (left: RubyValue, right: Char) -> RubyValue {
+    left send("+", right toString() toRString())
+}
+
 Ruby init()
 test := Ruby load("test.rb")
 Ruby eval("puts 'hi'")
@@ -331,5 +453,23 @@ Ruby getConstant("Fixnum") getConstant("K") inspect() println()
 1 toRNumber() send("+", 2 toRNumber()) println()
 
 2 toRNumber() send(Ruby eval(":+"), 2 toRNumber()) println() // I needed to test passing a RubyValue
+
+(2 toRNumber() + 3) println()
+
+rubyArray := Ruby eval("[1,2,3]")
+rubyArray inspect() println()
+rubyArray[0] = 2
+rubyArray[1] = "Hai thar"
+rubyArray inspect() println()
+
+rubyHash := Ruby eval("{ 'a' => 'b', 'c' => 'd' }")
+rubyHash["a"] = "hai"
+rubyHash inspect() println()
+
+//x := Ruby eval("[1,2,3]")[10] send("==", Ruby nil)
+//(x != Ruby false)
+//y := ((x != Ruby false) && (x != Ruby nil)) ? "true" : "false"
+
+//(Ruby eval("[1,2,3]")[10] == Ruby nil) //toString() println()
 
 Ruby finalize()

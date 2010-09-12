@@ -323,6 +323,7 @@ operator [] (item: RubyValue, index: SSizeT) -> RubyValue {
     item send("[]", range toRRange())
 }*/
 
+/* RubyValue[RubyValue] = * */
 operator []= (item, index, value: RubyValue) -> RubyValue {
     item send("[]=", index, value)
 }
@@ -339,6 +340,7 @@ operator []= (item, index: RubyValue, value: CString) -> RubyValue {
     item send("[]=", index, value toRString())
 }
 
+/* RubyValue[SSizeT] = * */
 operator []= (item: RubyValue, index: SSizeT, value: RubyValue) -> RubyValue {
     item send("[]=", index toRNumber(), value)
 }
@@ -355,6 +357,7 @@ operator []= (item: RubyValue, index: SSizeT, value: CString) -> RubyValue {
     item send("[]=", index toRNumber(), value toRString())
 }
 
+/* RubyValue[String] = * */
 operator []= (item: RubyValue, index: String, value: RubyValue) -> RubyValue {
     item send("[]=", index toRString(), value)
 }
@@ -371,6 +374,7 @@ operator []= (item: RubyValue, index: String, value: CString) -> RubyValue {
     item send("[]=", index toRString(), value toRString())
 }
 
+/* RubyValue[CString] = * */
 operator []= (item: RubyValue, index: CString, value: RubyValue) -> RubyValue {
     item send("[]=", index toRString(), value)
 }
@@ -411,10 +415,6 @@ operator + (left: RubyValue, right: String) -> RubyValue {
 
 operator + (left: RubyValue, right: CString) -> RubyValue {
     left send("+", right toRString())
-}
-
-operator + (left: RubyValue, right: Char) -> RubyValue {
-    left send("+", right toString() toRString())
 }
 
 Ruby init()
@@ -464,6 +464,7 @@ rubyArray inspect() println()
 
 rubyHash := Ruby eval("{ 'a' => 'b', 'c' => 'd' }")
 rubyHash["a"] = "hai"
+rubyHash["ab"] = "hai"
 rubyHash inspect() println()
 
 //x := Ruby eval("[1,2,3]")[10] send("==", Ruby nil)

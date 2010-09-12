@@ -54,14 +54,22 @@ RubyValue: cover from VALUE {
 
     funcall: extern(rb_funcall2) func (id: RubyId, argc: Int, args: RubyValue*) -> RubyValue
 
-    send: func(f: String, args: ...) -> RubyValue {
+    send: func ~rid (f: RubyId, args: ...) -> RubyValue {
 	res := ArrayList<RubyValue> new()
 	argc := 0
 	args each (|arg|
 	    res add(arg as RubyValue)
 	    argc += 1
 	)
-	funcall(Ruby intern(f), argc, res toArray())
+	funcall(f, argc, res toArray())
+    }
+
+    send: func ~rvalue (f: RubyValue, args: ...) -> RubyValue {
+	send(f id(), args)
+    }
+
+    send: func ~oocstring (f: String, args: ...) -> RubyValue {
+	send(Ruby intern(f), args)
     }
 
     getConstantFromId: extern(rb_const_get) func (id: RubyId) -> RubyValue
@@ -82,6 +90,8 @@ RubyValue: cover from VALUE {
 	    return Ruby false
 	}
     }
+
+    id: extern(SYM2ID) func -> RubyId
 
     inspect: extern(rb_inspect) func -> RubyValue
 
@@ -308,15 +318,18 @@ Ruby getConstant("Fixnum") def("meep", |self|
     "ohai from Fixnum" println()
     Ruby nil
 )
-Ruby eval("1.meep")
+
+1 toRNumber() send("meep")
 
 Ruby getConstant("Fixnum") inspect() println()
 Ruby getConstant("Fixnum") setConstant("K", Ruby getConstant("Kernel"))
 Ruby getConstant("Fixnum") getConstant("K") inspect() println()
 
-Ruby eval("1") respondsTo?("methods") println()
-Ruby eval("1") respondsTo?("not_a_method") println()
+1 toRNumber() respondsTo?("methods") println()
+1 toRNumber() respondsTo?("not_a_method") println()
 
-Ruby eval("1") send("+", 2 toRNumber()) println()
+1 toRNumber() send("+", 2 toRNumber()) println()
+
+2 toRNumber() send(Ruby eval(":+"), 2 toRNumber()) println() // I needed to test passing a RubyValue
 
 Ruby finalize()

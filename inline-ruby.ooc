@@ -1,4 +1,10 @@
+import structs/ArrayList
 include ruby
+
+extend SSizeT {
+    toRNumber: extern(INT2NUM) func -> RubyValue
+    toRFixnum: extern(INT2FIX) func -> RubyValue
+}
 
 extend Int {
     toRNumber: extern(INT2NUM) func -> RubyValue
@@ -46,7 +52,17 @@ RubyValue: cover from VALUE {
 	this toString() println()
     }
 
-    // VALUE rb_funcall(VALUE recv, ID mid, int argc, ...)
+    funcall: extern(rb_funcall2) func (id: RubyId, argc: Int, args: RubyValue*) -> RubyValue
+
+    send: func(f: String, args: ...) -> RubyValue {
+	res := ArrayList<RubyValue> new()
+	argc := 0
+	args each (|arg|
+	    res add(arg as RubyValue)
+	    argc += 1
+	)
+	funcall(Ruby intern(f), argc, res toArray())
+    }
 
     getConstantFromId: extern(rb_const_get) func (id: RubyId) -> RubyValue
     getConstant: func (name: String) -> RubyValue {
@@ -166,7 +182,10 @@ Ruby: class {
 
     load: extern(rb_load_file) static func (CString) -> RubyNode
 
-    intern: extern(rb_intern) static func (CString) -> RubyId
+    intern: extern(rb_intern2) static func ~withLength (CString, Long) -> RubyId
+    intern: static func (name: String) -> RubyId {
+	intern(name, name size)
+    }
 
     getConstant: static func (name: String) -> RubyValue {
 	eval("Kernel") getConstant(name)
@@ -297,5 +316,7 @@ Ruby getConstant("Fixnum") getConstant("K") inspect() println()
 
 Ruby eval("1") respondsTo?("methods") println()
 Ruby eval("1") respondsTo?("not_a_method") println()
+
+Ruby eval("1") send("+", 2 toRNumber()) println()
 
 Ruby finalize()

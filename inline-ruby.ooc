@@ -65,7 +65,7 @@ RubyValue: cover from VALUE {
     }
 
     send: func ~rvalue (f: RubyValue, args: ...) -> RubyValue {
-	send(f id(), args)
+	send(f toId(), args)
     }
 
     send: func ~oocstring (f: String, args: ...) -> RubyValue {
@@ -91,7 +91,7 @@ RubyValue: cover from VALUE {
 	}
     }
 
-    id: extern(SYM2ID) func -> RubyId
+    toId: extern(SYM2ID) func -> RubyId
 
     inspect: extern(rb_inspect) func -> RubyValue
 

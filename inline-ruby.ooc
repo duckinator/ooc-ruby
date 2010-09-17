@@ -101,6 +101,11 @@ RubyValue: cover from VALUE {
 
     def: extern(rb_define_method) func (name: CString, fn: Pointer, argc: Int)
 
+/* Can has typed varargs? kthx
+    def: func ~args (name: String, fn: Func(RubyValue, args: RubyValue...) -> RubyValue) {
+	def(name, (fn as Closure) thunk, fn args length())
+    }*/
+
     def: func ~noArgs (name: String, fn: Func (RubyValue) -> RubyValue) {
 	def(name, (fn as Closure) thunk, 0)
     }
@@ -452,7 +457,7 @@ Ruby getConstant("Fixnum") getConstant("K") inspect() println()
 
 1 toRNumber() send("+", 2 toRNumber()) println()
 
-2 toRNumber() send(Ruby eval(":+"), 2 toRNumber()) println() // I needed to test passing a RubyValue
+2 toRNumber() send("+", 2 toRNumber()) println() // I needed to test passing a RubyValue
 
 (2 toRNumber() + 3) println()
 

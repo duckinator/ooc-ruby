@@ -200,6 +200,7 @@ Ruby: class {
     eval: extern(rb_eval_string) static func (CString) -> RubyValue
 
     load: extern(rb_load_file) static func (CString) -> RubyNode
+    require: extern(rb_require) static func (CString) -> RubyValue
 
     intern: extern(rb_intern2) static func ~withLength (CString, Long) -> RubyId
     intern: static func (name: String) -> RubyId {
@@ -423,7 +424,10 @@ operator + (left: RubyValue, right: CString) -> RubyValue {
 }
 
 Ruby init()
-test := Ruby load("test.rb")
+test := Ruby load("./test.rb")
+//test run()
+Ruby require("./test.rb")
+
 Ruby eval("puts 'hi'")
 Ruby eval("5") println()
 Ruby eval("[1,2,3]") inspect() println()

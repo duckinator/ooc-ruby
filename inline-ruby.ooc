@@ -199,6 +199,18 @@ Ruby: class {
     script: extern(ruby_script) static func(CString)
     eval: extern(rb_eval_string) static func (CString) -> RubyValue
 
+    send: static func ~rid (f: RubyId, args: ...) -> RubyValue {
+        eval("Kernel") send(f, args)
+    }
+
+    send: static func ~rvalue (f: RubyValue, args: ...) -> RubyValue {
+        Ruby send(f toId(), args)
+    }
+
+    send: static func ~oocstring (f: String, args: ...) -> RubyValue {
+        Ruby send(Ruby intern(f), args)
+    }
+
     load: extern(rb_load_file) static func (CString) -> RubyNode
     require: extern(rb_require) static func (CString) -> RubyValue
 
@@ -434,6 +446,7 @@ Ruby eval("[1,2,3]") inspect() println()
 
 Ruby def("greet", |self, name| "Hello, %s!" format(name toCString()) toRString())
 Ruby eval("greet('duck')") println()
+Ruby send("greet", "bob" toRString()) println()
 
 Ruby safe() toString() println()
 Ruby safe(3) toString() println()

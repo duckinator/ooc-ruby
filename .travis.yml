@@ -13,7 +13,7 @@ script:
 
 notifications:
   webhooks:
-    - http://rcmp.programble.co.cc/irc.tenthbit.net/programming
+    - http://rcmp.tenthbit.net
   
   email:
     on_success: change # default: change

@@ -1,0 +1,10 @@
+Name: ruby
+Version: head
+Origin: git://github.com/duckinator/ooc-ruby.git
+Description: Ruby interpreter access from ooc code
+#Pkgs: ruby-1.9
+IncludePaths: /usr/include/ruby-1.9.1/, /usr/include/ruby-1.9.1/x86_64-linux/, /usr/include/ruby-1.9.1/i686-linux/
+Includes: ruby.h
+Imports: ruby/ruby
+SourcePath: source
+

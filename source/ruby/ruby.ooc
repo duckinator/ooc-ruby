@@ -286,3 +286,4 @@ operator + (left: RubyValue, right: CString) -> RubyValue {
     left send("+", right toRString())
 }
 
+atexit(Ruby finalize)

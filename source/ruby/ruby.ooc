@@ -104,6 +104,7 @@ RubyValue: cover from VALUE {
 
 RubyNode: cover from Pointer {
     run: extern(ruby_run_node) func -> Int
+    exec: extern(ruby_exec_node) func -> Int
 }
 
 Ruby: class {

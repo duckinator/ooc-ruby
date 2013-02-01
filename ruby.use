@@ -6,6 +6,6 @@ Description: Ruby interpreter access from ooc code
 IncludePaths: /usr/include/ruby-1.9.1/, /usr/include/ruby-1.9.1/x86_64-linux/, /usr/include/ruby-1.9.1/i686-linux/
 Includes: ruby.h
 Libs: -lpthread, -lrt, -ldl, -lcrypt, -lm, -lruby-1.9.1
-Imports: ruby/ruby
+Imports: ruby/ruby, ruby/rubyvalue-def, ruby/ruby-def
 SourcePath: source
 

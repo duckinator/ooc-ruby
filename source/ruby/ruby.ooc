@@ -1,5 +1,5 @@
 import structs/ArrayList
-include ruby
+use ruby
 
 extend SSizeT {
     toRNumber: extern(INT2NUM) func -> RubyValue

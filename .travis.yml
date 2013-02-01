@@ -6,7 +6,17 @@ before_install:
 
 script:
   - export OOC_LIBS=$PWD
-  - cd samples
-# - mkdir -p travis
-# - rock -v example -o=travis/example && travis/example
+  - cd samples/test
+  - mkdir -p travis
+  - rock -v test && ./test
+
+
+notifications:
+  webhooks:
+    - http://rcmp.programble.co.cc/irc.tenthbit.net/programming
+  
+  email:
+    on_success: change # default: change
+    on_failure: change # default: always
+
 

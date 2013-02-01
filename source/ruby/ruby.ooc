@@ -286,4 +286,7 @@ operator + (left: RubyValue, right: CString) -> RubyValue {
     left send("+", right toRString())
 }
 
+
+// Automagically run Ruby init() at start and Ruby finalize() at exit
+Ruby init()
 atexit(Ruby finalize)

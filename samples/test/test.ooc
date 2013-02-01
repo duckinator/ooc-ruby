@@ -1,6 +1,5 @@
 use ruby
 
-Ruby init()
 test := Ruby load("./test.rb")
 //test run()
 Ruby require("./test.rb")

@@ -4,7 +4,7 @@
 
 ### Authors
 
-  * Nick Markwell <nick@duckinator.net>
+  * Marie Markwell <me@marie.so>
   
 ### Links
 

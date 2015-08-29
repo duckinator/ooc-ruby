@@ -1,5 +1,5 @@
 before_install:
-  - sudo aptitude -y -q install curl make libgc-dev ruby1.9.1-dev
+  - sudo apt-get -y -q install curl make libgc-dev ruby1.9.1-dev
   - git clone --depth=1 git://github.com/nddrylliog/rock.git 
   - (cd rock && make -s quick-rescue)
   - export PATH=$PATH:$PWD/rock/bin
@@ -12,9 +12,6 @@ script:
 
 
 notifications:
-  webhooks:
-    - http://rcmp.tenthbit.net
-  
   email:
     on_success: change # default: change
     on_failure: change # default: always
